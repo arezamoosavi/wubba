@@ -3,25 +3,36 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: signapp
-  name: signapp
+    app: nameko-api
+  name: nameko-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: signapp
+      app: nameko-api
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: signapp
+        app: nameko-api
     spec:
       containers:
-        - image: 10.10.0.1:5000/signapp:v1
-          name: signapp
+        - image: 10.10.0.1:5000/nameko-api:v1
+          name: nameko-api
+          imagePullPolicy: "IfNotPresent"
           env:
-            - name: POSTGRES_URL
-              value: postgres://user:password@postgresql-svc.default.svc.cluster.local:5432/testdb
+            - name: REDIS_HOST
+              value: redis-svc.default.svc.cluster.local
+            - name: REDIS_PORT
+              value: "6379"
+            - name: RABBIT_HOST
+              value: rmq-svc.default.svc.cluster.local
+            - name: RABBIT_USER
+              value: guest
+            - name: RABBIT_PASSWORD
+              value: guest
+            - name: RABBIT_PORT
+              value: "5672"
           resources: {}
 status: {}
